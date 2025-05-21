@@ -32,4 +32,7 @@ Thumbs.db
 htmlcov/
 
 # 주소록 파일
-addrbook.txt 
+addrbook.txt
+
+# 이미지 파일
+static/images/* 

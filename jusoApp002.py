@@ -135,9 +135,10 @@ def edit(id):
             # 기존 사진 파일 삭제
             if 'photo' in contact and contact['photo']:
                 try:
-                    old_photo_path = os.path.join('static', contact['photo'])
+                    old_photo_path = contact['photo']
                     if os.path.exists(old_photo_path):
                         os.remove(old_photo_path)
+                        print(f"이전 사진 파일 삭제 완료: {old_photo_path}")
                 except Exception as e:
                     print(f"기존 사진 삭제 오류: {e}")
                     
@@ -161,9 +162,10 @@ def delete(id):
     # 연락처에 사진이 있으면 삭제
     if contact and 'photo' in contact and contact['photo']:
         try:
-            photo_path = os.path.join('static', contact['photo'])
+            photo_path = contact['photo']
             if os.path.exists(photo_path):
                 os.remove(photo_path)
+                print(f"연락처 삭제 시 사진 파일 삭제 완료: {photo_path}")
         except Exception as e:
             print(f"사진 삭제 오류: {e}")
     
@@ -218,6 +220,8 @@ def upload_photo():
         
         # 상대 경로 반환 (슬래시 통일)
         rel_path = file_path.replace('\\', '/')
+        
+        # 이전에 사용하던 사진이 있으면 삭제 (이 부분은 실제 삭제는 edit 라우트에서 처리)
         return jsonify({'success': True, 'photo_path': rel_path})
     
     except Exception as e:

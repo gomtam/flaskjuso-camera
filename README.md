@@ -1,47 +1,72 @@
 # Flask 주소록 애플리케이션
 
-간단한 Flask 기반 주소록 웹 애플리케이션입니다. 이 앱을 통해 연락처를 추가, 편집, 삭제하고 검색할 수 있습니다.
+간단하고 직관적인 Flask 기반 주소록 웹 애플리케이션입니다. 사용자 친화적인 인터페이스로 연락처 정보를 쉽게 관리할 수 있습니다.
 
-## 기능
+## 주요 기능
 
-- 연락처 추가, 편집, 삭제
-- 연락처 검색
-- 반응형 디자인 (모바일 및 데스크톱 지원)
+- **연락처 관리**: 추가, 수정, 삭제 기능
+- **검색 기능**: 이름, 전화번호 등으로 빠른 검색
+- **사진 첨부**: 연락처에 사진 추가 가능
+- **반응형 디자인**: 모바일 및 데스크톱 환경 모두 지원
 
 ## 설치 방법
 
-1. 저장소를 복제합니다:
+### 1. 저장소 복제
 ```bash
 git clone https://github.com/gomtam/flaskjuso-camera.git
 cd flaskjuso-camera
 ```
 
-2. 가상 환경을 생성하고 활성화합니다:
+### 2. 가상 환경 설정
 ```bash
-conda create -n ( 가상 환경 이름 ) python=( 버전 )
-shift + ctrl + p -> python: select interpreter -> 가상환경 선택
+# Conda 사용 시
+conda create -n flaskjuso-camera python=3.9
+conda activate flaskjuso-camera
+
+# venv 사용 시
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# macOS/Linux
+source venv/bin/activate
 ```
 
-3. 필요한 패키지를 설치합니다:
+### 3. 필요 패키지 설치
 ```bash
 pip install -r requirements.txt
 ```
 
 ## 실행 방법
 
-1. 애플리케이션을 실행합니다:
+1. 애플리케이션 서버 실행:
 ```bash
 python jusoApp002.py
 ```
 
-2. 웹 브라우저에서 `http://127.0.0.1:5000`으로 접속합니다.
+2. 웹 브라우저에서 접속:
+```
+http://127.0.0.1:5000
+```
 
 ## 기술 스택
 
-- Python 3.x
-- Flask
-- SQLAlchemy (SQLite 데이터베이스)
-- HTML/CSS
+- **백엔드**: Python 3.x, Flask
+- **데이터 저장**: 텍스트 파일 기반 (addrbook.txt)
+- **프론트엔드**: HTML, CSS, JavaScript
+- **이미지 처리**: 기본 이미지 처리 기능 포함
+
+## 프로젝트 구조
+
+```
+flaskjuso-camera/
+├── jusoApp002.py      # 메인 애플리케이션 파일
+├── addrbook.txt       # 연락처 데이터 저장 파일
+├── static/
+│   ├── images/        # 사용자 사진 저장 디렉토리
+│   └── style.css      # 스타일시트
+├── templates/         # HTML 템플릿 디렉토리
+└── requirements.txt   # 필요 패키지 목록
+```
 
 ## 라이센스
 
