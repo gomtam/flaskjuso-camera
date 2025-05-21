@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block title %}연락처 추가{% endblock %}
+
+{% block content %}
+    <h2>새 연락처 추가</h2>
+    
+    <div class="form-container">
+        <form action="{{ url_for('add') }}" method="post" id="contactForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">이름 *</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">전화번호</label>
+                <input type="tel" id="phone" name="phone">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">이메일</label>
+                <input type="email" id="email" name="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="birthday">생일</label>
+                <input type="date" id="birthday" name="birthday">
+            </div>
+            
+            <div class="form-group">
+                <label for="address">주소</label>
+                <textarea id="address" name="address" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>사진</label>
+                <div class="camera-container">
+                    <div class="photo-options">
+                        <button type="button" id="cameraOption" class="option-btn active">카메라로 촬영</button>
+                        <button type="button" id="uploadOption" class="option-btn">파일 업로드</button>
+                    </div>
+                    
+                    <div id="cameraSection">
+                        <video id="video" width="320" height="240" autoplay></video>
+                        <button type="button" id="captureBtn" class="btn-secondary">사진 촬영</button>
+                        <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+                    </div>
+                    
+                    <div id="uploadSection" style="display:none;">
+                        <input type="file" id="fileInput" accept="image/*" class="file-input">
+                        <label for="fileInput" class="file-upload-btn">파일 선택</label>
+                        <div id="fileName" class="file-name"></div>
+                    </div>
+                    
+                    <div id="photoPreview" style="display:none;">
+                        <img id="capturedPhoto" width="320" height="240">
+                        <button type="button" id="retakeBtn" class="btn-secondary">다시 시도</button>
+                    </div>
+                    <input type="hidden" id="photo" name="photo">
+                </div>
+            </div>
+            
+            <div class="form-buttons">
+                <button type="submit" class="btn-primary">저장</button>
+                <a href="{{ url_for('index') }}" class="btn">취소</a>
+            </div>
+        </form>
+    </div>
+
+    <style>
+        .photo-options {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .option-btn {
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        .option-btn.active {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        
+        .file-input {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            position: absolute;
+            z-index: -1;
+        }
+        
+        .file-upload-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+
+    <script>
+        // 웹 카메라 접근 및 사진 캡처 기능
+        document.addEventListener('DOMContentLoaded', function() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const captureBtn = document.getElementById('captureBtn');
+            const retakeBtn = document.getElementById('retakeBtn');
+            const photoPreview = document.getElementById('photoPreview');
+            const capturedPhoto = document.getElementById('capturedPhoto');
+            const photoInput = document.getElementById('photo');
+            const context = canvas.getContext('2d');
+            
+            // 카메라/업로드 선택 옵션
+            const cameraOption = document.getElementById('cameraOption');
+            const uploadOption = document.getElementById('uploadOption');
+            const cameraSection = document.getElementById('cameraSection');
+            const uploadSection = document.getElementById('uploadSection');
+            const fileInput = document.getElementById('fileInput');
+            const fileName = document.getElementById('fileName');
+            
+            let stream;
+            
+            // 카메라 시작
+            async function startCamera() {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    video.srcObject = stream;
+                    video.style.display = 'block';
+                    captureBtn.style.display = 'block';
+                    photoPreview.style.display = 'none';
+                } catch (err) {
+                    console.error('카메라 접근 실패: ', err);
+                    alert('카메라에 접근할 수 없습니다. 카메라 권한을 확인해주세요.');
+                    // 카메라 접근 실패시 자동으로 파일 업로드 모드로 전환
+                    uploadOption.click();
+                }
+            }
+            
+            // 페이지 로드 시 카메라 시작
+            startCamera();
+            
+            // 카메라 옵션 선택
+            cameraOption.addEventListener('click', function() {
+                cameraOption.classList.add('active');
+                uploadOption.classList.remove('active');
+                cameraSection.style.display = 'block';
+                uploadSection.style.display = 'none';
+                photoPreview.style.display = 'none';
+                startCamera();
+            });
+            
+            // 업로드 옵션 선택
+            uploadOption.addEventListener('click', function() {
+                uploadOption.classList.add('active');
+                cameraOption.classList.remove('active');
+                cameraSection.style.display = 'none';
+                uploadSection.style.display = 'block';
+                photoPreview.style.display = 'none';
+                
+                // 카메라 스트림 중지
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+            });
+            
+            // 파일 선택시 파일명 표시
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileName.textContent = this.files[0].name;
+                    
+                    // 파일 미리보기
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        capturedPhoto.src = e.target.result;
+                        cameraSection.style.display = 'none';
+                        uploadSection.style.display = 'none';
+                        photoPreview.style.display = 'block';
+                        
+                        // 파일 업로드
+                        uploadPhoto(e.target.result);
+                    };
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+            
+            // 사진 촬영 버튼 클릭 이벤트
+            captureBtn.addEventListener('click', function() {
+                // 비디오 프레임을 캔버스로 그리기
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const photoData = canvas.toDataURL('image/jpeg');
+                
+                // 미리보기 표시
+                capturedPhoto.src = photoData;
+                cameraSection.style.display = 'none';
+                photoPreview.style.display = 'block';
+                
+                // 사진 업로드
+                uploadPhoto(photoData);
+            });
+            
+            // 다시 시도 버튼 클릭 이벤트
+            retakeBtn.addEventListener('click', function() {
+                photoPreview.style.display = 'none';
+                photoInput.value = '';
+                
+                if (cameraOption.classList.contains('active')) {
+                    cameraSection.style.display = 'block';
+                    startCamera();
+                } else {
+                    uploadSection.style.display = 'block';
+                    fileInput.value = '';
+                    fileName.textContent = '';
+                }
+            });
+            
+            // 서버에 사진 업로드
+            function uploadPhoto(photoData) {
+                fetch('/upload_photo', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ photo: photoData })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 업로드 성공 시 hidden 필드에 사진 경로 저장
+                        photoInput.value = data.photo_path;
+                    } else {
+                        alert('사진 업로드 실패: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('사진 업로드 오류: ', error);
+                    alert('사진 업로드 중 오류가 발생했습니다.');
+                });
+            }
+        });
+    </script>
+{% endblock %} 

@@ -1,0 +1,36 @@
+id|1
+name|김태민
+phone|010-3902-9387
+email|taemin0203@naver.com
+address|대전 동구 백룡로11번길 63
+created_at|2025-05-21T06:59:53.960010
+birthday|2000-02-03
+photo|static/images/8c051842-f022-4150-a995-6df9afdb06ad.jpg
+
+---
+id|2
+name|김철수
+phone|000-0000-0000
+email|ironwaterkim@gmail.com
+address|대전 동구 백룡로11번길 63
+created_at|2025-05-21T07:00:27.666307
+birthday|2025-05-01
+
+---
+id|3
+name|홍길동
+phone|111-1111-1111
+email|honghong@naver.com
+address|동해번쩍 서해번쩍
+created_at|2025-05-21T07:00:59.675228
+birthday|2025-05-09
+
+---
+id|4
+name|James Bond
+phone|000-0000-7777
+email|007@secret.com
+address|Unknown
+created_at|2025-05-21T07:01:53.792922
+birthday|2025-05-16
+photo|static/images/090cc7cb-f140-4113-9043-4856720a7825.jpg

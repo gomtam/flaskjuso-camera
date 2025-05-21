@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}홈{% endblock %}
+
+{% block content %}
+    <h2>내 연락처 목록</h2>
+    
+    <div class="search-box">
+        <form action="{{ url_for('search') }}" method="get">
+            <input type="text" name="query" placeholder="검색어 입력..." value="{{ search_query if search_query else '' }}">
+            <button type="submit">검색</button>
+            {% if search_query %}
+                <a href="{{ url_for('index') }}" class="clear-search">전체보기</a>
+            {% endif %}
+        </form>
+    </div>
+    
+    {% if contacts %}
+        <div class="contacts">
+            {% for contact in contacts %}
+                <div class="contact-card">
+                    {% if contact.get('photo') %}
+                        <div class="contact-photo">
+                            <img src="/{{ contact['photo'] }}" alt="{{ contact['name'] }}의 사진" width="120" height="120">
+                        </div>
+                    {% endif %}
+                    <div class="contact-info">
+                        <h3>{{ contact['name'] }}</h3>
+                        {% if contact['phone'] %}
+                            <p><strong>전화:</strong> {{ contact['phone'] }}</p>
+                        {% endif %}
+                        {% if contact['email'] %}
+                            <p><strong>이메일:</strong> {{ contact['email'] }}</p>
+                        {% endif %}
+                        {% if contact['birthday'] %}
+                            <p><strong>생일:</strong> {{ contact['birthday'] }}</p>
+                        {% endif %}
+                        {% if contact['address'] %}
+                            <p><strong>주소:</strong> {{ contact['address'] }}</p>
+                        {% endif %}
+                        <div class="actions">
+                            <a href="{{ url_for('edit', id=contact['id']) }}" class="btn-edit">편집</a>
+                            <a href="{{ url_for('delete', id=contact['id']) }}" class="btn-delete" onclick="return confirm('정말로 이 연락처를 삭제하시겠습니까?');">삭제</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-contacts">연락처가 없습니다. 새 연락처를 추가해보세요!</p>
+    {% endif %}
+    
+    <div class="add-contact-btn">
+        <a href="{{ url_for('add') }}" class="btn">새 연락처 추가</a>
+    </div>
+    
+    <style>
+        .contacts {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .contact-card {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .contact-photo {
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .contact-photo img {
+            border-radius: 60px;
+            object-fit: cover;
+        }
+        
+        .contact-info {
+            flex: 1;
+            min-width: 0; /* 중요: flexbox에서 오버플로우 방지 */
+            overflow-wrap: break-word; /* 긴 단어 줄바꿈 */
+            word-wrap: break-word;
+        }
+        
+        .contact-info p {
+            margin: 8px 0;
+            max-width: 100%;
+            white-space: normal; /* 줄바꿈 허용 */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+        }
+        
+        .camera-container {
+            margin-top: 15px;
+        }
+        
+        #captureBtn, #retakeBtn, #changePhotoBtn, .file-upload-btn {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        #captureBtn:hover, #retakeBtn:hover, #changePhotoBtn:hover, .file-upload-btn:hover {
+            background-color: #45a049;
+        }
+        
+        .actions {
+            margin-top: 15px;
+        }
+        
+        .search-box {
+            margin-bottom: 20px;
+        }
+    </style>
+{% endblock %} 
