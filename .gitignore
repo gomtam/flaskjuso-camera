@@ -35,4 +35,5 @@ htmlcov/
 addrbook.txt
 
 # 이미지 파일
+static/images/
 static/images/* 
