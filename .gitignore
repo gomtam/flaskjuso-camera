@@ -29,4 +29,7 @@ Thumbs.db
 # 캐시 파일
 .pytest_cache/
 .coverage
-htmlcov/ 
+htmlcov/
+
+# 주소록 파일
+addrbook.txt 
