@@ -3,10 +3,12 @@
 간단하고 직관적인 Flask 기반 주소록 웹 애플리케이션입니다. 사용자 친화적인 인터페이스로 연락처 정보를 쉽게 관리할 수 있습니다.
 
 ## 주요 기능
-
 - **연락처 관리**: 추가, 수정, 삭제 기능
+<img src="https://github.com/gomtam/image/blob/main/250521/%EC%A3%BC%EC%86%8C%EB%A1%9D-%ED%99%88-05-21-2025_05_05_PM.png" width="700">
 - **검색 기능**: 이름, 전화번호 등으로 빠른 검색
+- <img src="https://github.com/gomtam/image/blob/main/250521/%EC%A3%BC%EC%86%8C%EB%A1%9D-%ED%99%88-05-21-2025_05_05_PM%20(1).png" width="700">
 - **사진 첨부**: 연락처에 사진 추가 가능
+- <img src="https://github.com/gomtam/image/blob/main/250521/%EC%A3%BC%EC%86%8C%EB%A1%9D-%EC%97%B0%EB%9D%BD%EC%B2%98-%EC%88%98%EC%A0%95-05-21-2025_04_47_PM.png" width="700">
 - **반응형 디자인**: 모바일 및 데스크톱 환경 모두 지원
 
 ## 설치 방법
